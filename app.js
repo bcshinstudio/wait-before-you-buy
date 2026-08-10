@@ -10,7 +10,8 @@
 // - Decision history and statistics
 // - Navigation between application sections
 //
-// Product data is defined separately in products.js.
+// Product data is defined separately in products.js and accessed
+// through the product source layer in product-source.js.
 // Page styling is defined separately in style.css.
 // ============================================================
 
@@ -108,10 +109,12 @@ function renderProducts(category = "All") {
 
     container.innerHTML = "";
 
+    const availableProducts = getProducts();
+    
     const filtered =
         category === "All"
-            ? products
-            : products.filter(
+            ? availableProducts
+            : availableProducts.filter(
                 product => product.category === category
             );
 
@@ -170,7 +173,7 @@ function filterProducts(category) {
 
 function openWaitModal(id) {
     const product =
-        products.find(product => product.id === id);
+        getProducts().find(product => product.id === id);
 
     if (!product) return;
 
