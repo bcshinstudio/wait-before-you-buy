@@ -103,13 +103,13 @@ function decisionDate(item) {
 // PRODUCT DISPLAY
 // ============================================================
 
-function renderProducts(category = "All") {
+function renderProducts(category = "All", productList = getProducts()) {
     const container =
         document.getElementById("products");
 
     container.innerHTML = "";
 
-    const availableProducts = getProducts();
+    const availableProducts = productList;
     
     const filtered =
         category === "All"
@@ -163,6 +163,22 @@ function filterProducts(category) {
     renderProducts(category);
 }
 
+// ============================================================
+// PRODUCT SEARCH
+// ============================================================
+// Searches through the product-source layer, then reuses the
+// existing product-card renderer to display matching results.
+// ============================================================
+
+async function handleProductSearch() {
+    const searchInput =
+        document.getElementById("productSearch");
+
+    const results =
+        await searchProducts(searchInput.value);
+
+    renderProducts("All", results);
+}
 
 // ============================================================
 // WAITING-PERIOD SELECTION
