@@ -7,7 +7,9 @@
 <title>Wait Before You Buy</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -39,11 +41,11 @@ header {
 }
 
 .logo span {
-    font-weight: normal;
-    color: #777;
-    font-size: 14px;
     display: block;
     margin-top: 3px;
+    color: #777;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 nav button {
@@ -70,8 +72,8 @@ nav button {
 }
 
 .hero h1 {
-    font-size: 38px;
     margin: 0 0 12px;
+    font-size: 38px;
 }
 
 .hero p {
@@ -156,10 +158,20 @@ main {
     background: #222;
     color: white;
     cursor: pointer;
+    font-size: 14px;
 }
 
-.panel { display: none; }
-.panel.active { display: block; }
+.add-button:hover {
+    background: #444;
+}
+
+.panel {
+    display: none;
+}
+
+.panel.active {
+    display: block;
+}
 
 .summary {
     display: grid;
@@ -181,9 +193,9 @@ main {
 }
 
 .summary-number {
+    margin-top: 8px;
     font-size: 28px;
     font-weight: bold;
-    margin-top: 8px;
 }
 
 .cart-item {
@@ -227,10 +239,6 @@ main {
     cursor: pointer;
 }
 
-.decision-buttons button:hover {
-    background: #eee;
-}
-
 .empty {
     background: white;
     border: 1px dashed #bbb;
@@ -247,6 +255,114 @@ main {
     line-height: 1.5;
 }
 
+
+/* Waiting-period modal */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal-product {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modal-price {
+    font-size: 20px;
+    margin-bottom: 22px;
+}
+
+.recommendation {
+    background: #f5f5f5;
+    padding: 13px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.wait-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.wait-option {
+    padding: 11px 6px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+}
+
+.wait-option.selected {
+    background: #222;
+    color: white;
+    border-color: #222;
+}
+
+.custom-row {
+    margin-top: 12px;
+}
+
+.custom-row input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.modal-actions button {
+    padding: 11px 17px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cancel-button {
+    background: white;
+    border: 1px solid #bbb;
+}
+
+.confirm-button {
+    background: #222;
+    color: white;
+    border: 1px solid #222;
+}
+
 footer {
     text-align: center;
     color: #777;
@@ -255,7 +371,9 @@ footer {
 }
 
 @media (max-width: 600px) {
-    header { padding: 15px; }
+    header {
+        padding: 15px;
+    }
 
     .header-row {
         align-items: flex-start;
@@ -269,6 +387,10 @@ footer {
 
     .hero h1 {
         font-size: 29px;
+    }
+
+    .wait-options {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -386,6 +508,69 @@ you really need it.
 </main>
 
 
+<!-- Waiting Period Modal -->
+
+<div id="waitModal" class="modal-overlay">
+
+<div class="modal">
+
+<h2>Give Yourself Time</h2>
+
+<div class="modal-product" id="modalProductName"></div>
+
+<div class="modal-price" id="modalProductPrice"></div>
+
+<div class="recommendation">
+Recommended cooling-off period:
+<strong id="recommendedDays"></strong>
+</div>
+
+<div>
+How long would you like to wait?
+</div>
+
+<div class="wait-options">
+
+<button class="wait-option" data-days="7" onclick="selectWait(7)">
+7 Days
+</button>
+
+<button class="wait-option" data-days="14" onclick="selectWait(14)">
+14 Days
+</button>
+
+<button class="wait-option" data-days="30" onclick="selectWait(30)">
+30 Days
+</button>
+
+</div>
+
+<div class="custom-row">
+<input
+    id="customDays"
+    type="number"
+    min="1"
+    max="365"
+    placeholder="Or enter a custom number of days"
+    oninput="selectCustomWait()">
+</div>
+
+<div class="modal-actions">
+
+<button class="cancel-button" onclick="closeWaitModal()">
+Cancel
+</button>
+
+<button class="confirm-button" onclick="confirmAddToCart()">
+Add to Cart
+</button>
+
+</div>
+
+</div>
+</div>
+
+
 <footer>
 © 2026 BC Shin Studio
 </footer>
@@ -416,6 +601,9 @@ JSON.parse(localStorage.getItem("waitCart")) || [];
 
 let history =
 JSON.parse(localStorage.getItem("waitHistory")) || [];
+
+let pendingProduct = null;
+let selectedWaitDays = null;
 
 
 function money(value) {
@@ -480,7 +668,7 @@ ${money(product.price)}
 
 <button
 class="add-button"
-onclick="addToCart(${product.id})">
+onclick="openWaitModal(${product.id})">
 Add to Cart
 </button>
 
@@ -495,13 +683,11 @@ container.appendChild(card);
 
 
 function filterProducts(category) {
-
 renderProducts(category);
-
 }
 
 
-function addToCart(id) {
+function openWaitModal(id) {
 
 const product =
 products.find(p => p.id === id);
@@ -509,35 +695,117 @@ products.find(p => p.id === id);
 if (cart.some(item => item.id === id)) {
 
 alert("This item is already in your cart.");
-
 return;
 
 }
 
-const waitDays =
+pendingProduct = product;
+
+const recommended =
 recommendedWait(product.price);
+
+selectedWaitDays = recommended;
+
+document.getElementById("modalProductName").textContent =
+product.name;
+
+document.getElementById("modalProductPrice").textContent =
+money(product.price);
+
+document.getElementById("recommendedDays").textContent =
+recommended + " days";
+
+document.getElementById("customDays").value = "";
+
+document
+.querySelectorAll(".wait-option")
+.forEach(button => {
+
+button.classList.toggle(
+"selected",
+Number(button.dataset.days) === recommended
+);
+
+});
+
+document.getElementById("waitModal")
+.classList.add("active");
+
+}
+
+
+function closeWaitModal() {
+
+document.getElementById("waitModal")
+.classList.remove("active");
+
+pendingProduct = null;
+selectedWaitDays = null;
+
+}
+
+
+function selectWait(days) {
+
+selectedWaitDays = days;
+
+document.getElementById("customDays").value = "";
+
+document
+.querySelectorAll(".wait-option")
+.forEach(button => {
+
+button.classList.toggle(
+"selected",
+Number(button.dataset.days) === days
+);
+
+});
+
+}
+
+
+function selectCustomWait() {
+
+const value =
+Number(document.getElementById("customDays").value);
+
+document
+.querySelectorAll(".wait-option")
+.forEach(button =>
+button.classList.remove("selected")
+);
+
+selectedWaitDays =
+value >= 1 ? value : null;
+
+}
+
+
+function confirmAddToCart() {
+
+if (!pendingProduct) return;
+
+if (!selectedWaitDays || selectedWaitDays < 1) {
+
+alert("Please choose a waiting period.");
+return;
+
+}
 
 cart.push({
 
-...product,
+...pendingProduct,
 
 added:new Date().toISOString(),
 
-waitDays:waitDays
+waitDays:selectedWaitDays
 
 });
 
 save();
-
 renderCart();
-
-alert(
-product.name +
-" was added to your cart.\n\n" +
-"Cooling-off period: " +
-waitDays +
-" days."
-);
+closeWaitModal();
 
 }
 
@@ -545,7 +813,6 @@ waitDays +
 function daysWaiting(date) {
 
 const start = new Date(date);
-
 const now = new Date();
 
 return Math.floor(
@@ -630,7 +897,6 @@ Math.max(item.waitDays - days,0);
 const ready =
 remaining === 0;
 
-
 const box =
 document.createElement("div");
 
@@ -677,7 +943,6 @@ Your cooling-off period is complete.
 You've had time to think about this purchase.
 
 </div>
-
 
 <div class="decision-buttons">
 
@@ -735,7 +1000,6 @@ if (!item) return;
 item.waitDays += 7;
 
 save();
-
 renderCart();
 
 }
@@ -748,27 +1012,21 @@ cart.find(i => i.id === id);
 
 if (!item) return;
 
-
 history.unshift({
 
 ...item,
 
 decision:decision,
 
-decisionDate:
-new Date().toISOString()
+decisionDate:new Date().toISOString()
 
 });
-
 
 cart =
 cart.filter(i => i.id !== id);
 
-
 save();
-
 renderCart();
-
 renderHistory();
 
 }
@@ -779,25 +1037,21 @@ function renderHistory() {
 const container =
 document.getElementById("historyList");
 
-
 const avoided =
 history.filter(
 item => item.decision === "avoided"
 );
-
 
 const wanted =
 history.filter(
 item => item.decision === "wanted"
 );
 
-
 const avoidedTotal =
 avoided.reduce(
 (sum,item) => sum + item.price,
 0
 );
-
 
 document.getElementById("avoidedCount").textContent =
 avoided.length;
@@ -821,7 +1075,6 @@ return;
 
 container.innerHTML = "";
 
-
 history.forEach(item => {
 
 const div =
@@ -829,7 +1082,6 @@ document.createElement("div");
 
 div.className =
 "history-item";
-
 
 div.innerHTML = `
 
@@ -876,17 +1128,14 @@ document
 panel.classList.remove("active")
 );
 
-
 document
 .getElementById(panelName)
 .classList.add("active");
-
 
 document.getElementById("hero").style.display =
 panelName === "store"
 ? "block"
 : "none";
-
 
 if (panelName === "cart")
 renderCart();
@@ -894,10 +1143,21 @@ renderCart();
 if (panelName === "history")
 renderHistory();
 
-
 window.scrollTo(0,0);
 
 }
+
+
+/* Close modal if user clicks outside the box */
+
+document.getElementById("waitModal")
+.addEventListener("click", function(event) {
+
+if (event.target === this) {
+closeWaitModal();
+}
+
+});
 
 
 renderProducts();
