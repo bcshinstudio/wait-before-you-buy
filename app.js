@@ -35,6 +35,7 @@ let history =
 
 let pendingProduct = null;
 let selectedWaitDays = null;
+let displayedProducts = [];
 
 
 // ============================================================
@@ -118,6 +119,8 @@ function renderProducts(category = "All", productList = getProducts()) {
                 product => product.category === category
             );
 
+    displayedProducts = filtered;
+
     filtered.forEach(product => {
         const card =
             document.createElement("div");
@@ -189,7 +192,7 @@ async function handleProductSearch() {
 
 function openWaitModal(id) {
     const product =
-        getProducts().find(product => product.id === id);
+        displayedProducts.find(product => product.id === id);
 
     if (!product) return;
 
