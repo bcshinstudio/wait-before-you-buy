@@ -588,7 +588,7 @@ function expireFirstCartItemForTesting() {
 
     item.added = expiredDate.toISOString();
 
-    saveCart();
+    save();
     renderCart();
 
     console.log(
