@@ -565,6 +565,36 @@ document
         }
     });
 
+// ======================================================
+// DEVELOPMENT / TESTING
+// ======================================================
+// Temporarily expires the first item in the cart so the
+// post-wait decision workflow can be tested immediately.
+// Remove this helper after end-to-end testing is complete.
+// ======================================================
+
+function expireFirstCartItemForTesting() {
+    if (cart.length === 0) {
+        console.log("TEST: Cart is empty.");
+        return;
+    }
+
+    const item = cart[0];
+
+    const expiredDate = new Date();
+    expiredDate.setDate(
+        expiredDate.getDate() - item.waitDays - 1
+    );
+
+    item.added = expiredDate.toISOString();
+
+    saveCart();
+    renderCart();
+
+    console.log(
+        `TEST: "${item.name}" cooling-off period has been completed.`
+    );
+}
 
 // ============================================================
 // APPLICATION STARTUP
