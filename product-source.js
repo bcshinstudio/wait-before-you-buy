@@ -119,22 +119,36 @@ function getProducts() {
 // ============================================================
 
 async function searchProducts(query) {
-    const searchText = query.trim().toLowerCase();
+    const searchText = query.trim();
 
+    // An empty search restores the normal demo catalog.
     if (!searchText) {
         return getProducts();
     }
 
-    return getProducts().filter(product => {
-        const searchableText = [
-            product.name,
-            product.description,
-            product.category
-        ]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
+    const endpoint =
+        "https://wait-before-you-buy-api.bcshin-studio.workers.dev/products" +
+        "?q=" +
+        encodeURIComponent(searchText);
 
-        return searchableText.includes(searchText);
-    });
+    try {
+        const response = await fetch(endpoint);
+
+        if (!response.ok) {
+            throw new Error(
+                `Product search failed with status ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        return Array.isArray(data.products)
+            ? data.products
+            : [];
+
+    } catch (error) {
+        console.error("Product search error:", error);
+
+        return [];
+    }
 }
