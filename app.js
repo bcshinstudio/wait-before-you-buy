@@ -121,6 +121,12 @@ function renderProducts(category = "All", productList = getProducts()) {
 
     displayedProducts = filtered;
 
+    if (filtered.length === 0) {
+        container.innerHTML =
+            '<div class="empty search-empty">No products found. Try a different search.</div>';
+    
+        return;
+    }    
     filtered.forEach(product => {
         const card =
             document.createElement("div");
@@ -182,7 +188,11 @@ async function handleProductSearch() {
 
     renderProducts("All", results);
 }
-
+function handleSearchKeydown(event) {
+    if (event.key === "Enter") {
+        handleProductSearch();
+    }
+}
 // ============================================================
 // WAITING-PERIOD SELECTION
 // ============================================================
