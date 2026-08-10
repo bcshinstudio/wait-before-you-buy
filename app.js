@@ -138,7 +138,7 @@ function renderProducts(category = "All", productList = getProducts()) {
                 ${
                     product.image
                         ? `<img src="${product.image}" alt="${product.name}">`
-                        : product.icon
+                        : product.icon || "📦"
                 }
             </div>
 
@@ -156,7 +156,7 @@ function renderProducts(category = "All", productList = getProducts()) {
 
                 <button
                     class="add-button"
-                    onclick="openWaitModal(${product.id})">
+                    onclick="openWaitModal('${product.id}')">
                     Add to Cart
                 </button>
 
