@@ -1,3 +1,7 @@
+/* ============================================================
+   GLOBAL / BASE STYLES
+   ============================================================ */
+
 * {
     box-sizing: border-box;
 }
@@ -8,6 +12,11 @@ body {
     background: #f7f7f7;
     color: #222;
 }
+
+
+/* ============================================================
+   HEADER / PRIMARY NAVIGATION
+   ============================================================ */
 
 header {
     background: white;
@@ -55,6 +64,11 @@ nav button {
     font-size: 12px;
 }
 
+
+/* ============================================================
+   STORE INTRODUCTION / HERO
+   ============================================================ */
+
 .hero {
     background: white;
     text-align: center;
@@ -74,11 +88,59 @@ nav button {
     line-height: 1.6;
 }
 
+
+/* ============================================================
+   MAIN PAGE LAYOUT
+   ============================================================ */
+
 main {
     max-width: 1200px;
     margin: auto;
     padding: 35px 20px 60px;
 }
+
+
+/* ============================================================
+   PRODUCT SEARCH
+   ============================================================ */
+/*
+   Search controls are kept separate from category filters so
+   the search interface can later work with retailer API results
+   without changing the surrounding store layout.
+*/
+
+.product-search {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0 14px;
+}
+
+.product-search input {
+    flex: 1;
+    max-width: 420px;
+    padding: 10px 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.product-search button {
+    padding: 10px 16px;
+    border: 1px solid #222;
+    border-radius: 6px;
+    background: #222;
+    color: white;
+    cursor: pointer;
+}
+
+.search-empty {
+    margin-top: 20px;
+}
+
+
+/* ============================================================
+   PRODUCT FILTERS
+   ============================================================ */
 
 .filters {
     margin-bottom: 25px;
@@ -92,6 +154,11 @@ main {
     border-radius: 20px;
     cursor: pointer;
 }
+
+
+/* ============================================================
+   PRODUCT GRID / PRODUCT CARDS
+   ============================================================ */
 
 .products {
     display: grid;
@@ -115,6 +182,18 @@ main {
     justify-content: center;
     background: #ececec;
     font-size: 55px;
+}
+
+/*
+   Real product photos use the same image area currently used
+   by demo icons, so API-provided images will not require a
+   different product-card layout.
+*/
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 28px;
 }
 
 .product-info {
@@ -156,6 +235,15 @@ main {
     background: #444;
 }
 
+
+/* ============================================================
+   APPLICATION PANELS
+   ============================================================ */
+/*
+   Store, cart, and decision history remain in the same page.
+   app.js controls which panel is currently visible.
+*/
+
 .panel {
     display: none;
 }
@@ -163,6 +251,11 @@ main {
 .panel.active {
     display: block;
 }
+
+
+/* ============================================================
+   CART / DECISION SUMMARY
+   ============================================================ */
 
 .summary {
     display: grid;
@@ -188,6 +281,11 @@ main {
     font-size: 28px;
     font-weight: bold;
 }
+
+
+/* ============================================================
+   CART ITEMS / COOLING-OFF STATUS
+   ============================================================ */
 
 .cart-item {
     background: white;
@@ -230,6 +328,11 @@ main {
     cursor: pointer;
 }
 
+
+/* ============================================================
+   EMPTY STATES / DECISION HISTORY
+   ============================================================ */
+
 .empty {
     background: white;
     border: 1px dashed #bbb;
@@ -246,7 +349,10 @@ main {
     line-height: 1.5;
 }
 
-/* Waiting-period modal */
+
+/* ============================================================
+   WAITING-PERIOD MODAL
+   ============================================================ */
 
 .modal-overlay {
     display: none;
@@ -294,6 +400,11 @@ main {
     margin-bottom: 20px;
     line-height: 1.5;
 }
+
+
+/* ============================================================
+   WAITING-PERIOD OPTIONS
+   ============================================================ */
 
 .wait-options {
     display: grid;
@@ -353,6 +464,11 @@ main {
     border: 1px solid #222;
 }
 
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
 footer {
     text-align: center;
     color: #777;
@@ -360,7 +476,13 @@ footer {
     padding: 30px;
 }
 
+
+/* ============================================================
+   MOBILE LAYOUT
+   ============================================================ */
+
 @media (max-width: 600px) {
+
     header {
         padding: 15px;
     }
@@ -379,14 +501,20 @@ footer {
         font-size: 29px;
     }
 
+    .product-search {
+        flex-direction: column;
+    }
+
+    .product-search input {
+        max-width: none;
+        width: 100%;
+    }
+
+    .product-search button {
+        width: 100%;
+    }
+
     .wait-options {
         grid-template-columns: 1fr;
     }
-}
-/* Product photos use the existing product-image area without changing card layout. */
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 28px;
 }
