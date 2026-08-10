@@ -58,5 +58,5 @@ const simulatedExternalProducts = [
 // ============================================================
 
 function getProducts() {
-    return simulatedExternalProducts;
+    return products;
 }
