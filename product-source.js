@@ -53,10 +53,46 @@ const simulatedExternalProducts = [
 // ============================================================
 // ACTIVE PRODUCT SOURCE
 // ============================================================
-// For this temporary test, return the simulated external
-// products instead of the demo catalog.
+// Returns the product collection currently used by the app.
+//
+// The demo catalog remains active while external API access is
+// being developed. The application should access products
+// through this layer rather than depending directly on
+// products.js.
 // ============================================================
 
 function getProducts() {
     return products;
+}
+
+// ============================================================
+// PRODUCT SEARCH
+// ============================================================
+// Provides a common search interface for product sources.
+//
+// This prototype searches the currently active local catalog.
+// The function is intentionally asynchronous so app.js can use
+// the same interface later when searches come from a retailer
+// API over the network.
+// ============================================================
+
+async function searchProducts(query) {
+    const searchText = query.trim().toLowerCase();
+
+    if (!searchText) {
+        return getProducts();
+    }
+
+    return getProducts().filter(product => {
+        const searchableText = [
+            product.name,
+            product.description,
+            product.category
+        ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+        return searchableText.includes(searchText);
+    });
 }
