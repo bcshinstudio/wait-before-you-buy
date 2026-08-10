@@ -123,7 +123,11 @@ function renderProducts(category = "All") {
 
         card.innerHTML = `
             <div class="product-image">
-                ${product.icon}
+                ${
+                    product.image
+                        ? `<img src="${product.image}" alt="${product.name}">`
+                        : product.icon
+                }
             </div>
 
             <div class="product-info">
