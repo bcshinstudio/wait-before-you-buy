@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wait Before You Buy</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    color: #222;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 18px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-row {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span {
+    font-weight: normal;
+    color: #777;
+    font-size: 14px;
+    display: block;
+    margin-top: 3px;
+}
+
+nav button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 20px;
+}
+
+nav button:hover {
+    text-decoration: underline;
+}
+
+.cart-count {
+    background: #222;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 12px;
+}
+
+.hero {
+    background: white;
+    text-align: center;
+    padding: 55px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin: 0 0 12px;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: auto;
+    color: #666;
+    line-height: 1.6;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 35px 20px 60px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+.filters {
+    margin-bottom: 25px;
+}
+
+.filters button {
+    padding: 8px 14px;
+    margin: 0 5px 7px 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background: #eee;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image {
+    height: 175px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ececec;
+    font-size: 55px;
+}
+
+.product-info {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.category {
+    color: #777;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.product h3 {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0 18px;
+}
+
+.add-button {
+    margin-top: auto;
+    padding: 11px;
+    border: none;
+    border-radius: 6px;
+    background: #222;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-button:hover {
+    background: #444;
+}
+
+.panel {
+    display: none;
+}
+
+.panel.active {
+    display: block;
+}
+
+.cart-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 15px;
+}
+
+.cart-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.cart-item h3 {
+    margin-top: 0;
+}
+
+.waiting {
+    color: #666;
+    margin: 8px 0;
+}
+
+.decision-buttons {
+    margin-top: 15px;
+}
+
+.decision-buttons button {
+    padding: 9px 13px;
+    margin: 5px 5px 0 0;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}
+
+.decision-buttons button:hover {
+    background: #eee;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.summary-box {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.summary-label {
+    color: #777;
+    font-size: 13px;
+}
+
+.summary-number {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.empty {
+    background: white;
+    border: 1px dashed #bbb;
+    padding: 30px;
+    text-align: center;
+    color: #777;
+    border-radius: 8px;
+}
+
+.history-item {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    padding: 30px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 15px;
+    }
+
+    .header-row {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    nav button {
+        margin-left: 8px;
+        font-size: 13px;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-row">
+        <div class="logo">
+            Wait Before You Buy
+            <span>Think first. Spend intentionally.</span>
+        </div>
+
+        <nav>
+            <button onclick="showPanel('store')">Store</button>
+            <button onclick="showPanel('cart')">
+                My Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button onclick="showPanel('history')">My Decisions</button>
+        </nav>
+    </div>
+</header>
+
+<section class="hero" id="hero">
+    <h1>Want it today. Decide later.</h1>
+
+    <p>
+        Add something you want to your cart without buying it.
+        Give yourself time, come back later, and decide whether
+        you really need it.
+    </p>
+</section>
+
+<main>
+
+<section id="store" class="panel active">
+
+    <h2 class="section-title">Browse</h2>
+
+    <div class="filters">
+        <button onclick="filterProducts('All')">All</button>
+        <button onclick="filterProducts('Electronics')">Electronics</button>
+        <button onclick="filterProducts('Home')">Home</button>
+        <button onclick="filterProducts('Hobbies')">Hobbies</button>
+        <button onclick="filterProducts('Lifestyle')">Lifestyle</button>
+    </div>
+
+    <div id="products" class="products"></div>
+
+</section>
+
+
+<section id="cart" class="panel">
+
+    <h2>Things I'm Thinking About</h2>
+
+    <div class="summary">
+        <div class="summary-box">
+            <div class="summary-label">Items in Cart</div>
+            <div class="summary-number" id="cartItems">0</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">Money I'm Considering Spending</div>
+            <div class="summary-number" id="cartValue">$0</div>
+        </div>
+    </div>
+
+    <div id="cartList"></div>
+
+</section>
+
+
+<section id="history" class="panel">
+
+    <h2>My Decisions</h2>
+
+    <div class="summary">
+
+        <div class="summary-box">
+            <div class="summary-label">Decided Not to Buy</div>
+            <div class="summary-number" id="avoidedCount">0</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">Money I Almost Spent</div>
+            <div class="summary-number" id="almostSpent">$0</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">Still Wanted</div>
+            <div class="summary-number" id="wantedCount">0</div>
+        </div>
+
+    </div>
+
+    <div id="historyList"></div>
+
+</section>
+
+</main>
+
+<footer>
+    © 2026 BC Shin Studio
+</footer>
+
+
+<script>
+
+const products = [
+
+    {
+        id: 1,
+        name: "Wireless Noise-Canceling Headphones",
+        price: 349.99,
+        category: "Electronics",
+        icon: "🎧"
+    },
+
+    {
+        id: 2,
+        name: "Smart Watch",
+        price: 299.99,
+        category: "Electronics",
+        icon: "⌚"
+    },
+
+    {
+        id: 3,
+        name: "Tablet",
+        price: 499.99,
+        category: "Electronics",
+        icon: "▣"
+    },
+
+    {
+        id: 4,
+        name: "Robot Vacuum",
+        price: 449.99,
+        category: "Home",
+        icon: "◉"
+    },
+
+    {
+        id: 5,
+        name: "Espresso Machine",
+        price: 599.99,
+        category: "Home",
+        icon: "☕"
+    },
+
+    {
+        id: 6,
+        name: "Air Fryer",
+        price: 129.99,
+        category: "Home",
+        icon: "♨"
+    },
+
+    {
+        id: 7,
+        name: "Mirrorless Camera",
+        price: 1299.99,
+        category: "Hobbies",
+        icon: "📷"
+    },
+
+    {
+        id: 8,
+        name: "Hiking Backpack",
+        price: 179.99,
+        category: "Hobbies",
+        icon: "🎒"
+    },
+
+    {
+        id: 9,
+        name: "Electric Guitar",
+        price: 749.99,
+        category: "Hobbies",
+        icon: "🎸"
+    },
+
+    {
+        id: 10,
+        name: "Premium Running Shoes",
+        price: 189.99,
+        category: "Lifestyle",
+        icon: "👟"
+    },
+
+    {
+        id: 11,
+        name: "Designer Sunglasses",
+        price: 279.99,
+        category: "Lifestyle",
+        icon: "🕶"
+    },
+
+    {
+        id: 12,
+        name: "Massage Chair",
+        price: 1999.99,
+        category: "Lifestyle",
+        icon: "🪑"
+    }
+
+];
+
+
+let cart = JSON.parse(localStorage.getItem("waitCart")) || [];
+
+let history = JSON.parse(localStorage.getItem("waitHistory")) || [];
+
+
+function money(value) {
+
+    return value.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
+
+}
+
+
+function renderProducts(category = "All") {
+
+    const container = document.getElementById("products");
+
+    container.innerHTML = "";
+
+    const filtered =
+        category === "All"
+        ? products
+        : products.filter(p => p.category === category);
+
+
+    filtered.forEach(product => {
+
+        const card = document.createElement("div");
+
+        card.className = "product";
+
+        card.innerHTML = `
+
+            <div class="product-image">
+                ${product.icon}
+            </div>
+
+            <div class="product-info">
+
+                <div class="category">
+                    ${product.category}
+                </div>
+
+                <h3>${product.name}</h3>
+
+                <div class="price">
+                    ${money(product.price)}
+                </div>
+
+                <button
+                    class="add-button"
+                    onclick="addToCart(${product.id})">
+                    Add to Cart
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+function filterProducts(category) {
+
+    renderProducts(category);
+
+}
+
+
+function recommendedWait(price) {
+
+    if (price < 25) return 1;
+
+    if (price < 100) return 3;
+
+    if (price < 500) return 7;
+
+    if (price < 1000) return 14;
+
+    return 30;
+
+}
+
+
+function addToCart(id) {
+
+    const product = products.find(p => p.id === id);
+
+    const alreadyAdded =
+        cart.some(item => item.id === id);
+
+    if (alreadyAdded) {
+
+        alert("This item is already in your cart.");
+
+        return;
+
+    }
+
+    cart.push({
+
+        ...product,
+
+        added: new Date().toISOString(),
+
+        waitDays: recommendedWait(product.price)
+
+    });
+
+    save();
+
+    renderCart();
+
+    alert(
+        product.name +
+        " was added to your cart.\n\n" +
+        "Recommended waiting period: " +
+        recommendedWait(product.price) +
+        " days."
+    );
+
+}
+
+
+function daysWaiting(date) {
+
+    const start = new Date(date);
+
+    const now = new Date();
+
+    return Math.floor(
+        (now - start) /
+        (1000 * 60 * 60 * 24)
+    );
+
+}
+
+
+function renderCart() {
+
+    const container =
+        document.getElementById("cartList");
+
+    document.getElementById("cartCount").textContent =
+        cart.length;
+
+    document.getElementById("cartItems").textContent =
+        cart.length;
+
+    const total =
+        cart.reduce(
+            (sum, item) => sum + item.price,
+            0
+        );
+
+    document.getElementById("cartValue").textContent =
+        money(total);
+
+
+    if (cart.length === 0) {
+
+        container.innerHTML =
+            '<div class="empty">Your cart is empty. Browse the store and add something you are thinking about buying.</div>';
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    cart.forEach(item => {
+
+        const days =
+            daysWaiting(item.added);
+
+        const remaining =
+            Math.max(
+                item.waitDays - days,
+                0
+            );
+
+
+        const box =
+            document.createElement("div");
+
+        box.className = "cart-item";
+
+
+        box.innerHTML = `
+
+            <div class="cart-top">
+
+                <div>
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <strong>
+                        ${money(item.price)}
+                    </strong>
+
+                    <div class="waiting">
+
+                        Added ${days === 0
+                            ? "today"
+                            : days + " day" +
+                              (days === 1 ? "" : "s") +
+                              " ago"}
+
+                        <br>
+
+                        Suggested wait:
+                        ${item.waitDays} days
+
+                        <br>
+
+                        ${
+                            remaining > 0
+                            ? remaining +
+                              " day" +
+                              (remaining === 1 ? "" : "s") +
+                              " remaining"
+                            : "Waiting period complete"
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="decision-buttons">
+
+                <button
+                    onclick="decide(${item.id}, 'wanted')">
+
+                    I Still Want It
+
+                </button>
+
+                <button
+                    onclick="decide(${item.id}, 'avoided')">
+
+                    I Don't Need It
+
+                </button>
+
+            </div>
+
+        `;
+
+        container.appendChild(box);
+
+    });
+
+}
+
+
+function decide(id, decision) {
+
+    const item =
+        cart.find(i => i.id === id);
+
+    if (!item) return;
+
+
+    history.unshift({
+
+        ...item,
+
+        decision: decision,
+
+        decisionDate:
+            new Date().toISOString()
+
+    });
+
+
+    cart =
+        cart.filter(i => i.id !== id);
+
+
+    save();
+
+    renderCart();
+
+    renderHistory();
+
+}
+
+
+function renderHistory() {
+
+    const container =
+        document.getElementById("historyList");
+
+
+    const avoided =
+        history.filter(
+            item => item.decision === "avoided"
+        );
+
+
+    const wanted =
+        history.filter(
+            item => item.decision === "wanted"
+        );
+
+
+    const avoidedTotal =
+        avoided.reduce(
+            (sum, item) => sum + item.price,
+            0
+        );
+
+
+    document.getElementById("avoidedCount").textContent =
+        avoided.length;
+
+    document.getElementById("wantedCount").textContent =
+        wanted.length;
+
+    document.getElementById("almostSpent").textContent =
+        money(avoidedTotal);
+
+
+    if (history.length === 0) {
+
+        container.innerHTML =
+            '<div class="empty">You have not made any decisions yet.</div>';
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    history.forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "history-item";
+
+
+        div.innerHTML = `
+
+            <strong>
+                ${item.name}
+            </strong>
+
+            — ${money(item.price)}
+
+            <br>
+
+            ${
+                item.decision === "avoided"
+                ? "Decided not to buy"
+                : "Still wanted after waiting"
+            }
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+function save() {
+
+    localStorage.setItem(
+        "waitCart",
+        JSON.stringify(cart)
+    );
+
+    localStorage.setItem(
+        "waitHistory",
+        JSON.stringify(history)
+    );
+
+}
+
+
+function showPanel(panelName) {
+
+    document
+        .querySelectorAll(".panel")
+        .forEach(panel =>
+            panel.classList.remove("active")
+        );
+
+
+    document
+        .getElementById(panelName)
+        .classList.add("active");
+
+
+    document.getElementById("hero").style.display =
+        panelName === "store"
+        ? "block"
+        : "none";
+
+
+    if (panelName === "cart")
+        renderCart();
+
+
+    if (panelName === "history")
+        renderHistory();
+
+
+    window.scrollTo(0, 0);
+
+}
+
+
+renderProducts();
+
+renderCart();
+
+renderHistory();
+
+</script>
+
+</body>
+</html>
