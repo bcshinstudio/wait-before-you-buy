@@ -18,7 +18,8 @@ const products = [
         name: "Wireless Noise-Canceling Headphones",
         price: 349.99,
         category: "Electronics",
-        icon: "headphones.png"
+        icon: "🎧",
+        image: "headphones.png"
     },
     {
         id: 2,
