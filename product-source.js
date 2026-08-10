@@ -49,6 +49,48 @@ const simulatedExternalProducts = [
     }
 ];
 
+// ============================================================
+// BEST BUY PRODUCT ADAPTER
+// ============================================================
+// Converts a Best Buy Products API result into the standard
+// product format used by the rest of the application.
+//
+// Keeping retailer-specific field names here prevents app.js
+// from depending directly on Best Buy's API structure.
+// ============================================================
+
+function normalizeBestBuyProduct(item) {
+    return {
+        id: item.sku,
+
+        name:
+            item.name ||
+            "Unnamed Product",
+
+        description:
+            item.shortDescription ||
+            item.longDescription ||
+            "",
+
+        price:
+            item.salePrice ??
+            item.regularPrice ??
+            0,
+
+        category:
+            item.categoryPath?.length
+                ? item.categoryPath[item.categoryPath.length - 1].name
+                : "Other",
+
+        image:
+            item.image || null,
+
+        source: "bestbuy",
+        sourceName: "Best Buy",
+        sourceProductId: String(item.sku),
+        sourceUrl: item.url || ""
+    };
+}
 
 // ============================================================
 // ACTIVE PRODUCT SOURCE
