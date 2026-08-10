@@ -10,9 +10,6 @@
 // rest of the application to know where the products came from.
 // ============================================================
 
-function getProducts() {
-    return simulatedExternalProducts;
-}
 
 // ============================================================
 // SIMULATED EXTERNAL PRODUCT SOURCE
@@ -51,3 +48,15 @@ const simulatedExternalProducts = [
         sourceUrl: "https://example.com/products/VAC-1002"
     }
 ];
+
+
+// ============================================================
+// ACTIVE PRODUCT SOURCE
+// ============================================================
+// For this temporary test, return the simulated external
+// products instead of the demo catalog.
+// ============================================================
+
+function getProducts() {
+    return simulatedExternalProducts;
+}
