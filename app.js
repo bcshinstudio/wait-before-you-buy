@@ -555,29 +555,50 @@ function renderHistory() {
 
         div.className = "history-item";
 
+const decisionDateText =
+    item.decisionDate
+        ? formatDate(new Date(item.decisionDate))
+        : "";
+
         div.innerHTML = `
             <strong>${item.name}</strong>
             — ${money(item.price)}
-
+        
             <br>
-
+        
             ${
                 item.decision === "not-needed" ||
                 item.decision === "avoided"
-                    ? "Decided not to buy"
+                    ? `Decided not to buy${
+                        decisionDateText
+                            ? ` · ${decisionDateText}`
+                            : ""
+                    }`
                     : item.purchaseOutcome === "worth-it"
-                        ? "Bought independently — Worth It"
+                        ? `Bought independently${
+                            decisionDateText
+                                ? ` · ${decisionDateText}`
+                                : ""
+                        } — Worth It`
                         : item.purchaseOutcome === "regret"
-                            ? "Bought independently — Regret Buying It"
+                            ? `Bought independently${
+                                decisionDateText
+                                    ? ` · ${decisionDateText}`
+                                    : ""
+                            } — Regret Buying It`
                             : `
-                                Bought independently
-
+                                Bought independently${
+                                    decisionDateText
+                                        ? ` · ${decisionDateText}`
+                                        : ""
+                                }
+        
                                 <div class="purchase-outcome-buttons">
                                     <button
                                         onclick="setPurchaseOutcome('${item.id}', 'worth-it')">
                                         Worth It
                                     </button>
-
+        
                                     <button
                                         onclick="setPurchaseOutcome('${item.id}', 'regret')">
                                         Regret Buying It
