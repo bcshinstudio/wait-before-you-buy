@@ -77,6 +77,6 @@ async function searchProducts(query) {
             error
         );
 
-        return [];
+        throw error;
     }
 }
