@@ -491,16 +491,7 @@ function setHistoryPeriod(period) {
         "waitHistoryPeriod",
         historyPeriod
     );
-
-    document
-        .querySelectorAll(".history-period")
-        .forEach(button => {
-            button.classList.toggle(
-                "active",
-                button.dataset.period === historyPeriod
-            );
-        });
-
+    
     renderHistory();
 }
 
@@ -543,6 +534,15 @@ function historyPeriodStart(period) {
 function renderHistory() {
     const container =
         document.getElementById("historyList");
+
+    document
+        .querySelectorAll(".history-period")
+        .forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.period === historyPeriod
+            );
+        });    
 
     const periodStart =
         historyPeriodStart(historyPeriod);
@@ -616,7 +616,7 @@ function renderHistory() {
 
     if (filteredHistory.length === 0) {
         container.innerHTML =
-            '<div class="empty">You have not made any decisions yet.</div>';
+            '<div class="empty">No decisions found for this time period.</div>';
 
         return;
     }
@@ -751,7 +751,6 @@ function showPanel(panelName) {
 
     if (panelName === "history") {
         renderHistory();
-        setHistoryPeriod(historyPeriod);
     }
 
     window.scrollTo(0, 0);
