@@ -226,7 +226,12 @@ main {
     margin: 8px 0;
     font-size: 18px;
 }
-
+.product-description {
+    margin-bottom: 12px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
 .price {
     font-size: 20px;
     font-weight: bold;
