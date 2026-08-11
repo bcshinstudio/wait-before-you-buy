@@ -78,12 +78,12 @@ function recommendedWait(price) {
 }
 
 
-function daysWaiting(date) {
+function daysWaiting(date, endDate = new Date()) {
     const start = new Date(date);
-    const now = new Date();
+    const end = new Date(endDate);
 
     return Math.floor(
-        (now - start) /
+        (end - start) /
         (1000 * 60 * 60 * 24)
     );
 }
@@ -555,10 +555,15 @@ function renderHistory() {
 
         div.className = "history-item";
 
-const decisionDateText =
-    item.decisionDate
-        ? formatDate(new Date(item.decisionDate))
-        : "";
+        const decisionDateText =
+            item.decisionDate
+                ? formatDate(new Date(item.decisionDate))
+                : "";
+        
+        const consideredDays =
+            item.added && item.decisionDate
+                ? daysWaiting(item.added, item.decisionDate)
+                : null;        
 
         div.innerHTML = `
             <strong>${item.name}</strong>
@@ -606,6 +611,17 @@ const decisionDateText =
                                 </div>
                             `
             }
+            
+            ${
+                consideredDays !== null
+                    ? `
+                        <div class="considered-time">
+                            Considered for ${consideredDays} day${consideredDays === 1 ? "" : "s"}
+                        </div>
+                    `
+                    : ""
+            }
+            
         `;
 
         container.appendChild(div);
