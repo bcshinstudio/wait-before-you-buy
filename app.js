@@ -153,6 +153,15 @@ function renderProducts(category = "All", productList = getProducts()) {
 
                 <h3>${product.name}</h3>
 
+                ${
+                    product.description
+                        ? `
+                            <div class="product-description">
+                                ${product.description}
+                            </div>
+                        `
+                        : ""
+                }                
                 <div class="price">
                     ${money(product.price)}
                 </div>
