@@ -186,10 +186,35 @@ async function handleProductSearch() {
     const searchInput =
         document.getElementById("productSearch");
 
-    const results =
-        await searchProducts(searchInput.value);
+    const container =
+        document.getElementById("products");
 
-    renderProducts("All", results);
+    const searchText =
+        searchInput.value.trim();
+
+    if (!searchText) {
+        renderProducts();
+        return;
+    }
+
+    container.innerHTML =
+        '<div class="empty search-empty">Searching...</div>';
+
+    try {
+        const results =
+            await searchProducts(searchText);
+
+        renderProducts("All", results);
+
+    } catch (error) {
+        console.error(
+            "Unable to load product search results:",
+            error
+        );
+
+        container.innerHTML =
+            '<div class="empty search-empty">We couldn\'t search products right now. Please try again.</div>';
+    }
 }
 function handleSearchKeydown(event) {
     if (event.key === "Enter") {
