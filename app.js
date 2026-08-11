@@ -584,6 +584,8 @@ function save() {
 // ============================================================
 
 function showPanel(panelName) {
+    localStorage.setItem("waitActivePanel", panelName);
+    
     document
         .querySelectorAll(".panel")
         .forEach(panel =>
@@ -635,3 +637,8 @@ document
 renderProducts();
 renderCart();
 renderHistory();
+
+const savedPanel =
+    localStorage.getItem("waitActivePanel") || "store";
+
+showPanel(savedPanel);
