@@ -492,6 +492,22 @@ function renderHistory() {
                 item.decision === "wanted"
         );
 
+    const worthIt =
+        bought.filter(
+            item => item.purchaseOutcome === "worth-it"
+        );
+    
+    const regretted =
+        bought.filter(
+            item => item.purchaseOutcome === "regret"
+        );
+    
+    const regretTotal =
+        regretted.reduce(
+            (sum, item) => sum + item.price,
+            0
+        );    
+
     const notNeededTotal =
         notNeeded.reduce(
             (sum, item) => sum + item.price,
@@ -506,6 +522,15 @@ function renderHistory() {
 
     document.getElementById("almostSpent").textContent =
         money(notNeededTotal);
+
+    document.getElementById("worthItCount").textContent =
+        worthIt.length;
+    
+    document.getElementById("regretCount").textContent =
+        regretted.length;
+    
+    document.getElementById("regretTotal").textContent =
+        money(regretTotal);    
 
     if (history.length === 0) {
         container.innerHTML =
