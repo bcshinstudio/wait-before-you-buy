@@ -133,6 +133,19 @@ main {
     cursor: pointer;
 }
 
+.store-intro {
+    max-width: 700px;
+    margin: -5px 0 20px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.browse-heading {
+    margin: 28px 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 .search-empty {
     margin-top: 20px;
 }
