@@ -367,18 +367,26 @@ function renderCart() {
         if (!ready) {
             reflectionArea = `
                 <div class="wait-box">
-
+        
                     <div class="waiting-title">
                         Suggested cooling-off period: ${item.waitDays} days
                     </div>
-
+        
                     ${remaining} day${remaining === 1 ? "" : "s"} remaining
-
+        
                     <br>
-
+        
                     Revisit after:
                     ${formatDate(decisionDate(item))}
-
+        
+                </div>
+        
+                <div class="decision-buttons">
+        
+                    <button onclick="decide('${item.id}', 'not-needed')">
+                        I Don't Want It Anymore
+                    </button>
+        
                 </div>
             `;
         } else {
