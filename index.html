@@ -88,7 +88,8 @@
                         type="search"
                         placeholder="Search products..."
                         autocomplete="off"
-                        onkeydown="handleSearchKeydown(event)">
+                        onkeydown="handleSearchKeydown(event)"
+                        onsearch="handleSearchClear(event)">
                     <button
                         type="button"
                         onclick="handleProductSearch()">
