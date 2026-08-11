@@ -37,6 +37,9 @@ let pendingProduct = null;
 let selectedWaitDays = null;
 let displayedProducts = [];
 
+let historyPeriod =
+    localStorage.getItem("waitHistoryPeriod") || "1M";
+
 
 // ============================================================
 // FORMATTING UTILITIES
@@ -481,20 +484,91 @@ function setPurchaseOutcome(id, outcome) {
 // ============================================================
 // DECISION HISTORY AND STATISTICS
 // ============================================================
+function setHistoryPeriod(period) {
+    historyPeriod = period;
+
+    localStorage.setItem(
+        "waitHistoryPeriod",
+        historyPeriod
+    );
+
+    document
+        .querySelectorAll(".history-period")
+        .forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.period === historyPeriod
+            );
+        });
+
+    renderHistory();
+}
+
+function historyPeriodStart(period) {
+    const now = new Date();
+
+    if (period === "All") {
+        return null;
+    }
+
+    if (period === "YTD") {
+        return new Date(
+            now.getFullYear(),
+            0,
+            1
+        );
+    }
+
+    const start = new Date(now);
+
+    if (period === "1M") {
+        start.setMonth(start.getMonth() - 1);
+    }
+
+    if (period === "3M") {
+        start.setMonth(start.getMonth() - 3);
+    }
+
+    if (period === "6M") {
+        start.setMonth(start.getMonth() - 6);
+    }
+
+    if (period === "1Y") {
+        start.setFullYear(start.getFullYear() - 1);
+    }
+
+    return start;
+}
 
 function renderHistory() {
     const container =
         document.getElementById("historyList");
 
+    const periodStart =
+        historyPeriodStart(historyPeriod);
+    
+    const filteredHistory =
+        history.filter(item => {
+            if (!periodStart) {
+                return true;
+            }
+    
+            if (!item.decisionDate) {
+                return false;
+            }
+    
+            return new Date(item.decisionDate) >= periodStart;
+        });
+
     const notNeeded =
-        history.filter(
+        filteredHistory.filter(
             item =>
                 item.decision === "not-needed" ||
                 item.decision === "avoided"
         );
 
     const bought =
-        history.filter(
+        filteredHistory.filter(
             item =>
                 item.decision === "bought" ||
                 item.decision === "wanted"
@@ -540,7 +614,7 @@ function renderHistory() {
     document.getElementById("regretTotal").textContent =
         money(regretTotal);    
 
-    if (history.length === 0) {
+    if (filteredHistory.length === 0) {
         container.innerHTML =
             '<div class="empty">You have not made any decisions yet.</div>';
 
@@ -549,7 +623,7 @@ function renderHistory() {
 
     container.innerHTML = "";
 
-    history.forEach(item => {
+    filteredHistory.forEach(item => {
         const div =
             document.createElement("div");
 
@@ -677,6 +751,7 @@ function showPanel(panelName) {
 
     if (panelName === "history") {
         renderHistory();
+        setHistoryPeriod(historyPeriod);
     }
 
     window.scrollTo(0, 0);
