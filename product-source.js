@@ -52,7 +52,7 @@ async function searchProducts(query) {
     }
 
     const endpoint =
-        "https://wait-before-you-buy-api.tempbcshin-studio.workers.dev/products" +
+        "https://wait-before-you-buy-api.bcshin-studio.workers.dev/products" +
         "?q=" +
         encodeURIComponent(searchText);
 
