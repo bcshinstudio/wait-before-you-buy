@@ -202,11 +202,17 @@ function handleSearchKeydown(event) {
 
 function openWaitModal(id) {
     const product =
-        displayedProducts.find(product => product.id === id);
+        displayedProducts.find(
+            product => String(product.id) === String(id)
+        );
 
     if (!product) return;
 
-    if (cart.some(item => item.id === id)) {
+    if (
+        cart.some(
+            item => String(item.id) === String(id)
+        )
+    ) {
         alert("This item is already in your cart.");
         return;
     }
@@ -308,6 +314,10 @@ function confirmAddToCart() {
 // ============================================================
 // CART
 // ============================================================
+// The cart is a simulated shopping cart. Items can remain here
+// indefinitely; completing the suggested cooling-off period
+// does not force the user to make a decision.
+// ============================================================
 
 function renderCart() {
     const container =
@@ -352,49 +362,45 @@ function renderCart() {
 
         box.className = "cart-item";
 
-        let decisionArea;
+        let reflectionArea;
 
         if (!ready) {
-            decisionArea = `
+            reflectionArea = `
                 <div class="wait-box">
 
                     <div class="waiting-title">
-                        Cooling-off period: ${item.waitDays} days
+                        Suggested cooling-off period: ${item.waitDays} days
                     </div>
 
                     ${remaining} day${remaining === 1 ? "" : "s"} remaining
 
                     <br>
 
-                    Decision available:
+                    Revisit after:
                     ${formatDate(decisionDate(item))}
 
                 </div>
             `;
         } else {
-            decisionArea = `
+            reflectionArea = `
                 <div class="wait-box ready">
 
                     <div class="waiting-title">
-                        Your cooling-off period is complete.
+                        You've had this in your cart for ${days} day${days === 1 ? "" : "s"}.
                     </div>
 
-                    You've had time to think about this purchase.
+                    Do you still feel the same way about it?
 
                 </div>
 
                 <div class="decision-buttons">
 
-                    <button onclick="decide(${item.id}, 'wanted')">
-                        Yes, I Still Want It
+                    <button onclick="decide('${item.id}', 'bought')">
+                        I Bought It
                     </button>
 
-                    <button onclick="waitLonger(${item.id})">
-                        I'm Not Sure — Wait Longer
-                    </button>
-
-                    <button onclick="decide(${item.id}, 'avoided')">
-                        No, I Don't Need It
+                    <button onclick="decide('${item.id}', 'not-needed')">
+                        I Don't Want It Anymore
                     </button>
 
                 </div>
@@ -417,7 +423,7 @@ function renderCart() {
                 }
             </p>
 
-            ${decisionArea}
+            ${reflectionArea}
         `;
 
         container.appendChild(box);
@@ -428,24 +434,9 @@ function renderCart() {
 // ============================================================
 // USER DECISIONS
 // ============================================================
-
-function waitLonger(id) {
-    const item =
-        cart.find(item => item.id === id);
-
-    if (!item) return;
-
-    // A user who is still unsure receives another seven days.
-    item.waitDays += 7;
-
-    save();
-    renderCart();
-}
-
-
 function decide(id, decision) {
     const item =
-        cart.find(item => item.id === id);
+        cart.find(item => String(item.id) === String(id));
 
     if (!item) return;
 
@@ -456,7 +447,7 @@ function decide(id, decision) {
     });
 
     cart =
-        cart.filter(item => item.id !== id);
+        cart.filter(item => String(item.id) !== String(id));
 
     save();
     renderCart();
@@ -472,30 +463,34 @@ function renderHistory() {
     const container =
         document.getElementById("historyList");
 
-    const avoided =
+    const notNeeded =
         history.filter(
-            item => item.decision === "avoided"
+            item =>
+                item.decision === "not-needed" ||
+                item.decision === "avoided"
         );
-
-    const wanted =
+    
+    const bought =
         history.filter(
-            item => item.decision === "wanted"
+            item =>
+                item.decision === "bought" ||
+                item.decision === "wanted"
         );
-
-    const avoidedTotal =
-        avoided.reduce(
+    
+    const notNeededTotal =
+        notNeeded.reduce(
             (sum, item) => sum + item.price,
             0
         );
 
     document.getElementById("avoidedCount").textContent =
-        avoided.length;
-
+        notNeeded.length;
+    
     document.getElementById("wantedCount").textContent =
-        wanted.length;
-
+        bought.length;
+    
     document.getElementById("almostSpent").textContent =
-        money(avoidedTotal);
+        money(notNeededTotal);
 
     if (history.length === 0) {
         container.innerHTML =
@@ -519,9 +514,10 @@ function renderHistory() {
             <br>
 
             ${
+                item.decision === "not-needed" ||
                 item.decision === "avoided"
                     ? "Decided not to buy"
-                    : "Still wanted after the cooling-off period"
+                    : "Bought independently"
             }
         `;
 
