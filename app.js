@@ -196,6 +196,13 @@ function handleSearchKeydown(event) {
         handleProductSearch();
     }
 }
+
+function handleSearchClear(event) {
+    if (event.target.value === "") {
+        renderProducts();
+    }
+}
+
 // ============================================================
 // WAITING-PERIOD SELECTION
 // ============================================================
