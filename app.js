@@ -454,6 +454,21 @@ function decide(id, decision) {
     renderHistory();
 }
 
+function setPurchaseOutcome(id, outcome) {
+    const item =
+        history.find(
+            item => String(item.id) === String(id)
+        );
+
+    if (!item) return;
+
+    item.purchaseOutcome = outcome;
+    item.purchaseOutcomeDate =
+        new Date().toISOString();
+
+    save();
+    renderHistory();
+}
 
 // ============================================================
 // DECISION HISTORY AND STATISTICS
@@ -469,14 +484,14 @@ function renderHistory() {
                 item.decision === "not-needed" ||
                 item.decision === "avoided"
         );
-    
+
     const bought =
         history.filter(
             item =>
                 item.decision === "bought" ||
                 item.decision === "wanted"
         );
-    
+
     const notNeededTotal =
         notNeeded.reduce(
             (sum, item) => sum + item.price,
@@ -485,10 +500,10 @@ function renderHistory() {
 
     document.getElementById("avoidedCount").textContent =
         notNeeded.length;
-    
+
     document.getElementById("wantedCount").textContent =
         bought.length;
-    
+
     document.getElementById("almostSpent").textContent =
         money(notNeededTotal);
 
@@ -517,14 +532,31 @@ function renderHistory() {
                 item.decision === "not-needed" ||
                 item.decision === "avoided"
                     ? "Decided not to buy"
-                    : "Bought independently"
+                    : item.purchaseOutcome === "worth-it"
+                        ? "Bought independently — Worth It"
+                        : item.purchaseOutcome === "regret"
+                            ? "Bought independently — Regret Buying It"
+                            : `
+                                Bought independently
+
+                                <div class="purchase-outcome-buttons">
+                                    <button
+                                        onclick="setPurchaseOutcome('${item.id}', 'worth-it')">
+                                        Worth It
+                                    </button>
+
+                                    <button
+                                        onclick="setPurchaseOutcome('${item.id}', 'regret')">
+                                        Regret Buying It
+                                    </button>
+                                </div>
+                            `
             }
         `;
 
         container.appendChild(div);
     });
 }
-
 
 // ============================================================
 // DATA STORAGE
