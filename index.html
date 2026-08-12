@@ -30,16 +30,22 @@
             </div>
 
             <nav id="primaryNav">
-                <button onclick="showPanel('store')">
+                <button
+                    data-panel="store"
+                    onclick="showPanel('store')">
                     Store
                 </button>
 
-                <button onclick="showPanel('cart')">
+                <button
+                    data-panel="cart"
+                    onclick="showPanel('cart')">
                     My Cart
                     <span class="cart-count" id="cartCount">0</span>
                 </button>
 
-                <button onclick="showPanel('history')">
+                <button
+                    data-panel="history"
+                    onclick="showPanel('history')">
                     My Decisions
                 </button>
             </nav>
