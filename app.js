@@ -711,7 +711,7 @@ function renderHistory() {
             — ${money(item.price)}
         
             <br>
-        
+       <div class="history-decision"> 
             ${
                 item.decision === "not-needed" ||
                 item.decision === "avoided"
@@ -752,7 +752,7 @@ function renderHistory() {
                                 </div>
                             `
             }
-            
+       </div>     
             ${
                 consideredDays !== null
                     ? `
