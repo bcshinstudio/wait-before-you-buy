@@ -614,9 +614,14 @@ function setPurchaseOutcome(historyId, outcome) {
 
     if (!item) return;
 
-    item.purchaseOutcome = outcome;
-    item.purchaseOutcomeDate =
-        new Date().toISOString();
+    if (outcome) {
+        item.purchaseOutcome = outcome;
+        item.purchaseOutcomeDate =
+            new Date().toISOString();
+    } else {
+        delete item.purchaseOutcome;
+        delete item.purchaseOutcomeDate;
+    }
 
     save();
     renderHistory();
@@ -694,6 +699,18 @@ function historyPeriodStart(period) {
     }
 
     return start;
+}
+
+function toggleDecisionEdit(historyId) {
+    const editArea =
+        document.getElementById(
+            `history-edit-${historyId}`
+        );
+
+    if (!editArea) return;
+
+    editArea.hidden =
+        !editArea.hidden;
 }
 
 function renderHistory() {
@@ -908,24 +925,65 @@ function renderHistory() {
        </div>     
 
         <div class="history-change-actions">
-            ${
-                item.decision === "not-needed" ||
-                item.decision === "avoided"
-                    ? `
-                        <button
-                            type="button"
-                            onclick="changeDecision('${item.historyId}', 'bought')">
-                            Change to Bought
-                        </button>
-                    `
-                    : `
-                        <button
-                            type="button"
-                            onclick="changeDecision('${item.historyId}', 'not-needed')">
-                            Change to Decided Not to Buy
-                        </button>
-                    `
-            }
+        
+            <button
+                type="button"
+                onclick="toggleDecisionEdit('${item.historyId}')">
+                Edit
+            </button>
+        
+            <div
+                class="history-edit-options"
+                id="history-edit-${item.historyId}"
+                hidden>
+        
+                <div>
+                    <strong>Decision:</strong>
+                </div>
+        
+                <button
+                    type="button"
+                    onclick="changeDecision('${item.historyId}', 'not-needed')">
+                    Decided Not to Buy
+                </button>
+        
+                <button
+                    type="button"
+                    onclick="changeDecision('${item.historyId}', 'bought')">
+                    Bought
+                </button>
+        
+                ${
+                    item.decision === "bought" ||
+                    item.decision === "wanted"
+                        ? `
+                            <div>
+                                <strong>Purchase outcome:</strong>
+                            </div>
+        
+                            <button
+                                type="button"
+                                onclick="setPurchaseOutcome('${item.historyId}', null)">
+                                Not Rated
+                            </button>
+        
+                            <button
+                                type="button"
+                                onclick="setPurchaseOutcome('${item.historyId}', 'worth-it')">
+                                Worth It
+                            </button>
+        
+                            <button
+                                type="button"
+                                onclick="setPurchaseOutcome('${item.historyId}', 'regret')">
+                                Regret Buying It
+                            </button>
+                        `
+                        : ""
+                }
+        
+            </div>
+        
         </div>
        
             ${
