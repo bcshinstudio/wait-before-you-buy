@@ -459,21 +459,47 @@ function renderCart() {
         }
 
         box.innerHTML = `
-            <h3>${item.name}</h3>
-
-            <strong>${money(item.price)}</strong>
-
-            <p>
-                Added ${
-                    days === 0
-                        ? "today"
-                        : days +
-                          " day" +
-                          (days === 1 ? "" : "s") +
-                          " ago"
-                }
-            </p>
-
+            <div class="cart-product">
+        
+                <div class="cart-product-image">
+                    ${
+                        item.image
+                            ? `<img src="${item.image}" alt="${item.name}">`
+                            : item.icon || "📦"
+                    }
+                </div>
+        
+                <div class="cart-product-info">
+        
+                    <h3>${item.name}</h3>
+        
+                    ${
+                        item.description
+                            ? `
+                                <div class="cart-product-description">
+                                    ${item.description}
+                                </div>
+                            `
+                            : ""
+                    }
+        
+                    <strong>${money(item.price)}</strong>
+        
+                    <p>
+                        Added ${
+                            days === 0
+                                ? "today"
+                                : days +
+                                  " day" +
+                                  (days === 1 ? "" : "s") +
+                                  " ago"
+                        }
+                    </p>
+        
+                </div>
+        
+            </div>
+        
             ${reflectionArea}
         `;
 
