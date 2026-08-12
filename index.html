@@ -426,7 +426,55 @@
 
     </div>
 
-
+    <!-- ======================================================
+         DECISION CORRECTION MODAL
+         Opens when the user changes a recorded decision
+         or purchase outcome.
+         ====================================================== -->
+    
+    <div id="decisionModal" class="modal-overlay">
+    
+        <div class="modal">
+    
+            <h2 id="decisionModalTitle">
+                Update Decision
+            </h2>
+    
+            <div
+                class="modal-product"
+                id="decisionModalProduct">
+            </div>
+    
+            <div
+                class="modal-price"
+                id="decisionModalPrice">
+            </div>
+    
+            <div
+                id="decisionModalPrompt"
+                class="decision-modal-prompt">
+            </div>
+    
+            <div
+                id="decisionModalOptions"
+                class="decision-modal-options">
+            </div>
+    
+            <div class="modal-actions">
+    
+                <button
+                    type="button"
+                    class="cancel-button"
+                    onclick="closeDecisionModal()">
+                    Cancel
+                </button>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
     <!-- ======================================================
          FOOTER
          ====================================================== -->
