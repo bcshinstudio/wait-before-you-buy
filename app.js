@@ -412,7 +412,8 @@ function renderCart() {
                 <div class="wait-box">
         
                     <div class="waiting-title">
-                        Suggested cooling-off period: ${item.waitDays} days
+                        Your cooling-off period:
+                        ${item.waitDays} day${item.waitDays === 1 ? "" : "s"}
                     </div>
         
                     ${remaining} day${remaining === 1 ? "" : "s"} remaining
