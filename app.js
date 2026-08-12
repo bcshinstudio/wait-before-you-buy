@@ -689,32 +689,56 @@ function openDecisionChange(historyId) {
         item.decision === "bought" ||
         item.decision === "wanted";
 
-    const itemLabel =
-        `${item.name} — ${money(item.price)}`;
-    
-    const message =
+    document.getElementById("decisionModalTitle").textContent =
         isBought
-            ? `${itemLabel}\n\n` +
-              "Change purchase decision:\n\n" +
-              "1 = Decided not to buy\n" +
-              "2 = Undecided"
-            : `${itemLabel}\n\n` +
-              "Change decision:\n\n" +
-              "1 = Bought it\n" +
-              "2 = Undecided";
+            ? "Update Purchase Decision"
+            : "Update Decision";
 
-    const choice =
-        prompt(message);
+    document.getElementById("decisionModalProduct").textContent =
+        item.name;
 
-    if (choice === null) return;
+    document.getElementById("decisionModalPrice").textContent =
+        money(item.price);
 
-    if (isBought && choice === "1") {
-        changeDecision(historyId, "not-needed");
-    } else if (!isBought && choice === "1") {
-        changeDecision(historyId, "bought");
-    } else if (choice === "2") {
-        returnHistoryToCart(historyId);
+    document.getElementById("decisionModalPrompt").textContent =
+        "What would you like to change this to?";
+
+    const options =
+        document.getElementById("decisionModalOptions");
+
+    if (isBought) {
+        options.innerHTML = `
+            <button
+                type="button"
+                onclick="applyDecisionChange('${historyId}', 'not-needed')">
+                Decided Not to Buy
+            </button>
+
+            <button
+                type="button"
+                onclick="returnDecisionToCart('${historyId}')">
+                Undecided
+            </button>
+        `;
+    } else {
+        options.innerHTML = `
+            <button
+                type="button"
+                onclick="applyDecisionChange('${historyId}', 'bought')">
+                Bought It
+            </button>
+
+            <button
+                type="button"
+                onclick="returnDecisionToCart('${historyId}')">
+                Undecided
+            </button>
+        `;
     }
+
+    document
+        .getElementById("decisionModal")
+        .classList.add("active");
 }
 
 
@@ -727,29 +751,84 @@ function openOutcomeChange(historyId) {
 
     if (!item) return;
 
-    const itemLabel =
-        `${item.name} — ${money(item.price)}`;
-    
-    const choice =
-        prompt(
-            `${itemLabel}\n\n` +
-            "Change purchase outcome:\n\n" +
-            "1 = Not Rated\n" +
-            "2 = Worth It\n" +
-            "3 = Regret Buying It"
-        );
+    document.getElementById("decisionModalTitle").textContent =
+        "Update Purchase Outcome";
 
-    if (choice === null) return;
+    document.getElementById("decisionModalProduct").textContent =
+        item.name;
 
-    if (choice === "1") {
-        setPurchaseOutcome(historyId, null);
-    } else if (choice === "2") {
-        setPurchaseOutcome(historyId, "worth-it");
-    } else if (choice === "3") {
-        setPurchaseOutcome(historyId, "regret");
+    document.getElementById("decisionModalPrice").textContent =
+        money(item.price);
+
+    document.getElementById("decisionModalPrompt").textContent =
+        "How would you rate this purchase?";
+
+    const options =
+        document.getElementById("decisionModalOptions");
+
+    const optionButtons = [];
+
+    if (item.purchaseOutcome) {
+        optionButtons.push(`
+            <button
+                type="button"
+                onclick="applyOutcomeChange('${historyId}', null)">
+                Not Rated
+            </button>
+        `);
     }
+
+    if (item.purchaseOutcome !== "worth-it") {
+        optionButtons.push(`
+            <button
+                type="button"
+                onclick="applyOutcomeChange('${historyId}', 'worth-it')">
+                Worth It
+            </button>
+        `);
+    }
+
+    if (item.purchaseOutcome !== "regret") {
+        optionButtons.push(`
+            <button
+                type="button"
+                onclick="applyOutcomeChange('${historyId}', 'regret')">
+                Regret Buying It
+            </button>
+        `);
+    }
+
+    options.innerHTML =
+        optionButtons.join("");
+
+    document
+        .getElementById("decisionModal")
+        .classList.add("active");
 }
 
+function closeDecisionModal() {
+    document
+        .getElementById("decisionModal")
+        .classList.remove("active");
+}
+
+
+function applyDecisionChange(historyId, decision) {
+    closeDecisionModal();
+    changeDecision(historyId, decision);
+}
+
+
+function applyOutcomeChange(historyId, outcome) {
+    closeDecisionModal();
+    setPurchaseOutcome(historyId, outcome);
+}
+
+
+function returnDecisionToCart(historyId) {
+    closeDecisionModal();
+    returnHistoryToCart(historyId);
+}
 
 // NEW — add immediately after openOutcomeChange()
 function returnHistoryToCart(historyId) {
@@ -1133,20 +1212,36 @@ document
         }
     });
 
-// Pressing Escape also closes the modal.
+// Pressing Escape closes whichever modal is open.
 document.addEventListener(
     "keydown",
     event => {
-        if (
-            event.key === "Escape" &&
-            document
-                .getElementById("waitModal")
-                .classList.contains("active")
-        ) {
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        const waitModal =
+            document.getElementById("waitModal");
+
+        const decisionModal =
+            document.getElementById("decisionModal");
+
+        if (decisionModal.classList.contains("active")) {
+            closeDecisionModal();
+        } else if (waitModal.classList.contains("active")) {
             closeWaitModal();
         }
     }
 );
+
+document
+    .getElementById("decisionModal")
+    .addEventListener("click", function(event) {
+        if (event.target === this) {
+            closeDecisionModal();
+        }
+    });
+
 // ============================================================
 // APPLICATION STARTUP
 // ============================================================
