@@ -893,6 +893,15 @@ function save() {
 
 function showPanel(panelName) {
     localStorage.setItem("waitActivePanel", panelName);
+
+    document
+        .querySelectorAll("#primaryNav button")
+        .forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.panel === panelName
+            );
+        });    
     
     document
         .querySelectorAll(".panel")
