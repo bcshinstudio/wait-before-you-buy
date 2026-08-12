@@ -893,13 +893,13 @@ function renderHistory() {
                                 <div class="purchase-outcome-buttons">
                                     <button
                                         type="button"
-                                        onclick="setPurchaseOutcome('${item.id}', 'worth-it')">
+                                        onclick="setPurchaseOutcome('${item.historyId}', 'worth-it')">
                                         Worth It
                                     </button>
-        
+                                    
                                     <button
                                         type="button"
-                                        onclick="setPurchaseOutcome('${item.id}', 'regret')">
+                                        onclick="setPurchaseOutcome('${item.historyId}', 'regret')">
                                         Regret Buying It
                                     </button>
                                 </div>
