@@ -434,6 +434,18 @@ main {
     background: #f2f6f2;
 }
 
+.ready-actions {
+    margin-top: 14px;
+}
+
+.ready-actions .not-needed-button {
+    border-color: #999;
+}
+
+.ready-actions .bought-button {
+    color: #555;
+}
+
 .decision-buttons {
     display: flex;
     flex-wrap: wrap;
