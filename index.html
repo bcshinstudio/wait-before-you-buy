@@ -31,12 +31,14 @@
 
             <nav id="primaryNav">
                 <button
+                    type="button"
                     data-panel="store"
                     onclick="showPanel('store')">
                     Store
                 </button>
 
                 <button
+                    type="button"
                     data-panel="cart"
                     onclick="showPanel('cart')">
                     My Cart
@@ -44,6 +46,7 @@
                 </button>
 
                 <button
+                    type="button"
                     data-panel="history"
                     onclick="showPanel('history')">
                     My Decisions
@@ -107,11 +110,15 @@
             <h3 class="browse-heading">Or browse ideas</h3>
             
             <div class="filters">
-                <button onclick="filterProducts('All')">
+                <button 
+                    type="button"
+                    onclick="filterProducts('All')">
                     All
                 </button>
 
-                <button onclick="filterProducts('Electronics')">
+                <button 
+                    type="button"
+                    onclick="filterProducts('Electronics')">
                     Electronics
                 </button>
 
@@ -119,11 +126,15 @@
                     Home
                 </button>
 
-                <button onclick="filterProducts('Hobbies')">
+                <button 
+                    type="button"
+                    onclick="filterProducts('Hobbies')">
                     Hobbies
                 </button>
 
-                <button onclick="filterProducts('Lifestyle')">
+                <button 
+                    type="button"
+                    onclick="filterProducts('Lifestyle')">
                     Lifestyle
                 </button>
             </div>
@@ -185,6 +196,7 @@
             
             <div class="history-periods">
                 <button
+                    type="button"
                     class="history-period active"
                     data-period="1M"
                     onclick="setHistoryPeriod('1M')">
@@ -192,6 +204,7 @@
                 </button>
         
                 <button
+                    type="button"
                     class="history-period"
                     data-period="3M"
                     onclick="setHistoryPeriod('3M')">
@@ -199,6 +212,7 @@
                 </button>
         
                 <button
+                    type="button"
                     class="history-period"
                     data-period="6M"
                     onclick="setHistoryPeriod('6M')">
@@ -213,6 +227,7 @@
                 </button>
         
                 <button
+                    type="button"
                     class="history-period"
                     data-period="1Y"
                     onclick="setHistoryPeriod('1Y')">
@@ -220,6 +235,7 @@
                 </button>
         
                 <button
+                    type="button"
                     class="history-period"
                     data-period="All"
                     onclick="setHistoryPeriod('All')">
@@ -345,6 +361,7 @@
 
             <div class="wait-options">
                 <button
+                    type="button"
                     class="wait-option"
                     data-days="1"
                     onclick="selectWait(1)">
@@ -352,6 +369,7 @@
                 </button>
                 
                 <button
+                    type="button"
                     class="wait-option"
                     data-days="7"
                     onclick="selectWait(7)">
@@ -359,6 +377,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="wait-option"
                     data-days="14"
                     onclick="selectWait(14)">
@@ -366,6 +385,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="wait-option"
                     data-days="30"
                     onclick="selectWait(30)">
@@ -387,12 +407,14 @@
             <div class="modal-actions">
 
                 <button
+                    type="button"
                     class="cancel-button"
                     onclick="closeWaitModal()">
                     Cancel
                 </button>
 
                 <button
+                    type="button"
                     class="confirm-button"
                     onclick="confirmAddToCart()">
                     Add to Cart
