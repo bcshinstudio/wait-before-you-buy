@@ -597,6 +597,54 @@ function setPurchaseOutcome(id, outcome) {
     renderHistory();
 }
 
+function changeDecision(id, decision) {
+    const item =
+        history.find(
+            item => String(item.id) === String(id)
+        );
+
+    if (!item) return;
+
+    item.decision = decision;
+    item.decisionDate =
+        new Date().toISOString();
+
+    if (
+        decision === "not-needed" ||
+        decision === "avoided"
+    ) {
+        delete item.purchaseOutcome;
+        delete item.purchaseOutcomeDate;
+    }
+
+    save();
+    renderHistory();
+}
+
+function changeDecision(id, decision) {
+    const item =
+        history.find(
+            item => String(item.id) === String(id)
+        );
+
+    if (!item) return;
+
+    item.decision = decision;
+    item.decisionDate =
+        new Date().toISOString();
+
+    if (
+        decision === "not-needed" ||
+        decision === "avoided"
+    ) {
+        delete item.purchaseOutcome;
+        delete item.purchaseOutcomeDate;
+    }
+
+    save();
+    renderHistory();
+}
+
 // ============================================================
 // DECISION HISTORY AND STATISTICS
 // ============================================================
