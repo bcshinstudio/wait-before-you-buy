@@ -45,11 +45,35 @@ function loadStoredArray(key) {
     }
 }
 
+function createHistoryId() {
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
+    ) {
+        return crypto.randomUUID();
+    }
+
+    return (
+        "history-" +
+        Date.now() +
+        "-" +
+        Math.random().toString(36).slice(2)
+    );
+}
+
 let cart =
     loadStoredArray("waitCart");
 
 let history =
     loadStoredArray("waitHistory");
+
+history =
+    history.map(item => ({
+        ...item,
+        historyId:
+            item.historyId ||
+            createHistoryId()
+    }));
 
 let pendingProduct = null;
 let selectedWaitDays = null;
@@ -569,9 +593,10 @@ function decide(id, decision) {
 
     history.unshift({
         ...item,
+        historyId: createHistoryId(),
         decision: decision,
         decisionDate: new Date().toISOString()
-    });
+    }); 
 
     cart =
         cart.filter(item => String(item.id) !== String(id));
@@ -581,10 +606,10 @@ function decide(id, decision) {
     renderHistory();
 }
 
-function setPurchaseOutcome(id, outcome) {
+function setPurchaseOutcome(historyId, outcome) {
     const item =
         history.find(
-            item => String(item.id) === String(id)
+            item => item.historyId === historyId
         );
 
     if (!item) return;
@@ -597,34 +622,10 @@ function setPurchaseOutcome(id, outcome) {
     renderHistory();
 }
 
-function changeDecision(id, decision) {
+function changeDecision(historyId, decision) {
     const item =
         history.find(
-            item => String(item.id) === String(id)
-        );
-
-    if (!item) return;
-
-    item.decision = decision;
-    item.decisionDate =
-        new Date().toISOString();
-
-    if (
-        decision === "not-needed" ||
-        decision === "avoided"
-    ) {
-        delete item.purchaseOutcome;
-        delete item.purchaseOutcomeDate;
-    }
-
-    save();
-    renderHistory();
-}
-
-function changeDecision(id, decision) {
-    const item =
-        history.find(
-            item => String(item.id) === String(id)
+            item => item.historyId === historyId
         );
 
     if (!item) return;
