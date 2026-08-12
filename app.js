@@ -27,11 +27,29 @@
 // stored under these keys.
 // ============================================================
 
+function loadStoredArray(key) {
+    try {
+        const value =
+            JSON.parse(localStorage.getItem(key));
+
+        return Array.isArray(value)
+            ? value
+            : [];
+    } catch (error) {
+        console.error(
+            `Unable to load ${key}:`,
+            error
+        );
+
+        return [];
+    }
+}
+
 let cart =
-    JSON.parse(localStorage.getItem("waitCart")) || [];
+    loadStoredArray("waitCart");
 
 let history =
-    JSON.parse(localStorage.getItem("waitHistory")) || [];
+    loadStoredArray("waitHistory");
 
 let pendingProduct = null;
 let selectedWaitDays = null;
@@ -46,12 +64,19 @@ let historyPeriod =
 // ============================================================
 
 function money(value) {
-    return value.toLocaleString("en-US", {
+    const amount =
+        Number(value);
+
+    const safeAmount =
+        Number.isFinite(amount)
+            ? amount
+            : 0;
+
+    return safeAmount.toLocaleString("en-US", {
         style: "currency",
         currency: "USD"
     });
 }
-
 
 function formatDate(date) {
     return date.toLocaleDateString("en-US", {
@@ -274,7 +299,9 @@ function openWaitModal(id) {
         money(product.price);
 
     document.getElementById("recommendedDays").textContent =
-        recommended + " days";
+        recommended +
+        " day" +
+        (recommended === 1 ? "" : "s");
 
     document.getElementById("customDays").value = "";
 
@@ -318,7 +345,6 @@ function selectWait(days) {
         });
 }
 
-
 function selectCustomWait() {
     const value =
         Number(document.getElementById("customDays").value);
@@ -330,15 +356,24 @@ function selectCustomWait() {
         );
 
     selectedWaitDays =
-        value >= 1 ? value : null;
+        Number.isInteger(value) &&
+        value >= 1 &&
+        value <= 365
+            ? value
+            : null;
 }
-
 
 function confirmAddToCart() {
     if (!pendingProduct) return;
 
-    if (!selectedWaitDays || selectedWaitDays < 1) {
-        alert("Please choose a waiting period.");
+    if (
+        !Number.isInteger(selectedWaitDays) ||
+        selectedWaitDays < 1 ||
+        selectedWaitDays > 365
+    ) {
+        alert(
+            "Please choose a waiting period between 1 and 365 days."
+        );
         return;
     }
 
@@ -659,6 +694,11 @@ function renderHistory() {
         bought.filter(
             item => item.purchaseOutcome === "regret"
         );
+
+    const unrated =
+    bought.filter(
+        item => !item.purchaseOutcome
+    );
     
     const regretTotal =
         regretted.reduce(
@@ -703,17 +743,27 @@ function renderHistory() {
         );
     }
     
-    if (bought.length > 0) {
-        insightLines.push(
-            `You bought ${bought.length} item${
-                bought.length === 1 ? "" : "s"
-            }. ${worthIt.length} ${
-                worthIt.length === 1 ? "was" : "were"
-            } worth it, and ${regretted.length} ${
-                regretted.length === 1 ? "was" : "were"
-            } regretted.`
-        );
+    let purchaseInsight =
+        `You bought ${bought.length} item${
+            bought.length === 1 ? "" : "s"
+        }. ${worthIt.length} ${
+            worthIt.length === 1 ? "was" : "were"
+        } worth it, and ${regretted.length} ${
+            regretted.length === 1 ? "was" : "were"
+        } regretted.`;
+    
+    if (unrated.length > 0) {
+        purchaseInsight +=
+            ` ${unrated.length} ${
+                unrated.length === 1
+                    ? "has"
+                    : "have"
+            } not been rated yet.`;
     }
+    
+    insightLines.push(
+        purchaseInsight
+    );
     
     if (regretted.length > 0) {
         insightLines.push(
