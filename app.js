@@ -906,6 +906,28 @@ function renderHistory() {
                             `
             }
        </div>     
+
+        <div class="history-change-actions">
+            ${
+                item.decision === "not-needed" ||
+                item.decision === "avoided"
+                    ? `
+                        <button
+                            type="button"
+                            onclick="changeDecision('${item.historyId}', 'bought')">
+                            Change to Bought
+                        </button>
+                    `
+                    : `
+                        <button
+                            type="button"
+                            onclick="changeDecision('${item.historyId}', 'not-needed')">
+                            Change to Decided Not to Buy
+                        </button>
+                    `
+            }
+        </div>
+       
             ${
                 consideredDays !== null
                     ? `
