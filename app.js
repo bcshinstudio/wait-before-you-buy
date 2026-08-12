@@ -651,6 +651,128 @@ function changeDecision(historyId, decision) {
     renderHistory();
 }
 
+function changeDecision(historyId, decision) {
+    const item =
+        history.find(
+            item => item.historyId === historyId
+        );
+
+    if (!item) return;
+
+    item.decision = decision;
+    item.decisionDate =
+        new Date().toISOString();
+
+    if (
+        decision === "not-needed" ||
+        decision === "avoided"
+    ) {
+        delete item.purchaseOutcome;
+        delete item.purchaseOutcomeDate;
+    }
+
+    save();
+    renderHistory();
+}
+
+
+// NEW — add here
+function openDecisionChange(historyId) {
+    const item =
+        history.find(
+            item => item.historyId === historyId
+        );
+
+    if (!item) return;
+
+    const isBought =
+        item.decision === "bought" ||
+        item.decision === "wanted";
+
+    const message =
+        isBought
+            ? "Change purchase decision:\n\n" +
+              "1 = Decided not to buy\n" +
+              "2 = Undecided"
+            : "Change decision:\n\n" +
+              "1 = Bought it\n" +
+              "2 = Undecided";
+
+    const choice =
+        prompt(message);
+
+    if (choice === null) return;
+
+    if (isBought && choice === "1") {
+        changeDecision(historyId, "not-needed");
+    } else if (!isBought && choice === "1") {
+        changeDecision(historyId, "bought");
+    } else if (choice === "2") {
+        returnHistoryToCart(historyId);
+    }
+}
+
+
+// NEW — add immediately after openDecisionChange()
+function openOutcomeChange(historyId) {
+    const item =
+        history.find(
+            item => item.historyId === historyId
+        );
+
+    if (!item) return;
+
+    const choice =
+        prompt(
+            "Change purchase outcome:\n\n" +
+            "1 = Not Rated\n" +
+            "2 = Worth It\n" +
+            "3 = Regret Buying It"
+        );
+
+    if (choice === null) return;
+
+    if (choice === "1") {
+        setPurchaseOutcome(historyId, null);
+    } else if (choice === "2") {
+        setPurchaseOutcome(historyId, "worth-it");
+    } else if (choice === "3") {
+        setPurchaseOutcome(historyId, "regret");
+    }
+}
+
+
+// NEW — add immediately after openOutcomeChange()
+function returnHistoryToCart(historyId) {
+    const item =
+        history.find(
+            item => item.historyId === historyId
+        );
+
+    if (!item) return;
+
+    const cartItem = {
+        ...item
+    };
+
+    delete cartItem.historyId;
+    delete cartItem.decision;
+    delete cartItem.decisionDate;
+    delete cartItem.purchaseOutcome;
+    delete cartItem.purchaseOutcomeDate;
+
+    cart.push(cartItem);
+
+    history =
+        history.filter(
+            item => item.historyId !== historyId
+        );
+
+    save();
+    renderCart();
+    renderHistory();
+}
+
 // ============================================================
 // DECISION HISTORY AND STATISTICS
 // ============================================================
@@ -699,18 +821,6 @@ function historyPeriodStart(period) {
     }
 
     return start;
-}
-
-function toggleDecisionEdit(historyId) {
-    const editArea =
-        document.getElementById(
-            `history-edit-${historyId}`
-        );
-
-    if (!editArea) return;
-
-    editArea.hidden =
-        !editArea.hidden;
 }
 
 function renderHistory() {
@@ -879,112 +989,46 @@ function renderHistory() {
             — ${money(item.price)}
         
             <br>
-       <div class="history-decision"> 
-            ${
-                item.decision === "not-needed" ||
-                item.decision === "avoided"
-                    ? `Decided not to buy${
-                        decisionDateText
-                            ? ` · ${decisionDateText}`
-                            : ""
-                    }`
-                    : item.purchaseOutcome === "worth-it"
-                        ? `Bought independently${
-                            decisionDateText
-                                ? ` · ${decisionDateText}`
-                                : ""
-                        } — Worth It`
-                        : item.purchaseOutcome === "regret"
-                            ? `Bought independently${
-                                decisionDateText
-                                    ? ` · ${decisionDateText}`
-                                    : ""
-                            } — Regret Buying It`
-                            : `
-                                Bought independently${
-                                    decisionDateText
-                                        ? ` · ${decisionDateText}`
-                                        : ""
-                                }
-        
-                                <div class="purchase-outcome-buttons">
-                                    <button
-                                        type="button"
-                                        onclick="setPurchaseOutcome('${item.historyId}', 'worth-it')">
-                                        Worth It
-                                    </button>
-                                    
-                                    <button
-                                        type="button"
-                                        onclick="setPurchaseOutcome('${item.historyId}', 'regret')">
-                                        Regret Buying It
-                                    </button>
-                                </div>
-                            `
-            }
-       </div>     
-
-        <div class="history-change-actions">
-        
+        <div class="history-decision">
             <button
                 type="button"
-                onclick="toggleDecisionEdit('${item.historyId}')">
-                Edit
+                class="history-text-button"
+                onclick="openDecisionChange('${item.historyId}')">
+                ${
+                    item.decision === "not-needed" ||
+                    item.decision === "avoided"
+                        ? "Decided not to buy"
+                        : "Bought independently"
+                }
             </button>
         
-            <div
-                class="history-edit-options"
-                id="history-edit-${item.historyId}"
-                hidden>
+            ${
+                decisionDateText
+                    ? ` · ${decisionDateText}`
+                    : ""
+            }
         
-                <div>
-                    <strong>Decision:</strong>
-                </div>
-        
-                <button
-                    type="button"
-                    onclick="changeDecision('${item.historyId}', 'not-needed')">
-                    Decided Not to Buy
-                </button>
-        
-                <button
-                    type="button"
-                    onclick="changeDecision('${item.historyId}', 'bought')">
-                    Bought
-                </button>
-        
-                ${
-                    item.decision === "bought" ||
-                    item.decision === "wanted"
-                        ? `
-                            <div>
-                                <strong>Purchase outcome:</strong>
-                            </div>
-        
-                            <button
-                                type="button"
-                                onclick="setPurchaseOutcome('${item.historyId}', null)">
-                                Not Rated
-                            </button>
-        
-                            <button
-                                type="button"
-                                onclick="setPurchaseOutcome('${item.historyId}', 'worth-it')">
-                                Worth It
-                            </button>
-        
-                            <button
-                                type="button"
-                                onclick="setPurchaseOutcome('${item.historyId}', 'regret')">
-                                Regret Buying It
-                            </button>
-                        `
-                        : ""
-                }
-        
-            </div>
-        
-        </div>
+            ${
+                item.decision === "bought" ||
+                item.decision === "wanted"
+                    ? `
+                        —
+                        <button
+                            type="button"
+                            class="history-text-button"
+                            onclick="openOutcomeChange('${item.historyId}')">
+                            ${
+                                item.purchaseOutcome === "worth-it"
+                                    ? "Worth It"
+                                    : item.purchaseOutcome === "regret"
+                                        ? "Regret Buying It"
+                                        : "Not Rated"
+                            }
+                        </button>
+                    `
+                    : ""
+            }
+</div>
        
             ${
                 consideredDays !== null
