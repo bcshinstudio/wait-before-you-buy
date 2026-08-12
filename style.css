@@ -56,6 +56,12 @@ nav button {
     margin-left: 20px;
 }
 
+nav button.active {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
 .cart-count {
     background: #222;
     color: white;
