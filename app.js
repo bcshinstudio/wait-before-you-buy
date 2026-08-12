@@ -690,6 +690,44 @@ function renderHistory() {
     document.getElementById("regretTotal").textContent =
         money(regretTotal);    
 
+    const insightContainer =
+    document.getElementById("decisionInsights");
+
+    const insightLines = [];
+    
+    if (notNeeded.length > 0) {
+        insightLines.push(
+            `You decided not to buy ${notNeeded.length} item${
+                notNeeded.length === 1 ? "" : "s"
+            } and avoided spending ${money(notNeededTotal)}.`
+        );
+    }
+    
+    if (bought.length > 0) {
+        insightLines.push(
+            `You bought ${bought.length} item${
+                bought.length === 1 ? "" : "s"
+            }. ${worthIt.length} ${
+                worthIt.length === 1 ? "was" : "were"
+            } worth it, and ${regretted.length} ${
+                regretted.length === 1 ? "was" : "were"
+            } regretted.`
+        );
+    }
+    
+    if (regretted.length > 0) {
+        insightLines.push(
+            `You spent ${money(regretTotal)} on purchases you later regretted.`
+        );
+    }
+    
+    insightContainer.innerHTML =
+        insightLines.length > 0
+            ? insightLines
+                .map(line => `<p>${line}</p>`)
+                .join("")
+            : "<p>No insights yet for this time period.</p>";
+    
     if (filteredHistory.length === 0) {
         container.innerHTML =
             '<div class="empty">No decisions found for this time period.</div>';
