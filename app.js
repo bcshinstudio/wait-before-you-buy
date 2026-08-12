@@ -489,13 +489,19 @@ function renderCart() {
                 </div>
         
                 <div class="decision-buttons">
-        
-                    <button 
+                
+                    <button
                         type="button"
                         onclick="decide('${item.id}', 'not-needed')">
                         I Don't Want It Anymore
                     </button>
-        
+                
+                    <button
+                        type="button"
+                        onclick="decide('${item.id}', 'bought')">
+                        I Bought It
+                    </button>
+                
                 </div>
             `;
         } else {
