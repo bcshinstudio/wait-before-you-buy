@@ -133,9 +133,12 @@ function daysWaiting(date, endDate = new Date()) {
     const start = new Date(date);
     const end = new Date(endDate);
 
-    return Math.floor(
-        (end - start) /
-        (1000 * 60 * 60 * 24)
+    return Math.max(
+        0,
+        Math.floor(
+            (end - start) /
+            (1000 * 60 * 60 * 24)
+        )
     );
 }
 
