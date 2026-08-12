@@ -73,7 +73,6 @@ function formatDate(date) {
 
 function recommendedWait(price) {
     if (price < 25) return 1;
-    if (price < 100) return 3;
     if (price < 500) return 7;
     if (price < 1000) return 14;
 
