@@ -191,6 +191,7 @@ function renderProducts(category = "All", productList = getProducts()) {
                 </div>
 
                 <button
+                    type="button"
                     class="add-button"
                     onclick="openWaitModal('${product.id}')">
                     Add to Cart
@@ -462,7 +463,9 @@ function renderCart() {
         
                 <div class="decision-buttons">
         
-                    <button onclick="decide('${item.id}', 'not-needed')">
+                    <button 
+                        type="button"
+                        onclick="decide('${item.id}', 'not-needed')">
                         I Don't Want It Anymore
                     </button>
         
@@ -488,12 +491,14 @@ function renderCart() {
                 <div class="decision-buttons ready-actions">
         
                     <button
+                        type="button"
                         class="not-needed-button"
                         onclick="decide('${item.id}', 'not-needed')">
                         I Don't Want It Anymore
                     </button>
         
                     <button
+                        type="button"
                         class="bought-button"
                         onclick="decide('${item.id}', 'bought')">
                         I Bought It
@@ -838,11 +843,13 @@ function renderHistory() {
         
                                 <div class="purchase-outcome-buttons">
                                     <button
+                                        type="button"
                                         onclick="setPurchaseOutcome('${item.id}', 'worth-it')">
                                         Worth It
                                     </button>
         
                                     <button
+                                        type="button"
                                         onclick="setPurchaseOutcome('${item.id}', 'regret')">
                                         Regret Buying It
                                     </button>
