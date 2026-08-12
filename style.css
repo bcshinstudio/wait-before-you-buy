@@ -349,6 +349,25 @@ main {
     color: #333;
 }
 
+.insight-box {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 28px;
+}
+
+.insight-box h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.insight-box p {
+    margin: 6px 0;
+    color: #444;
+    line-height: 1.5;
+}
+
 /* ============================================================
    CART ITEMS / COOLING-OFF STATUS
    ============================================================ */
