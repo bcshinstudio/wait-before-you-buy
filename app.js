@@ -436,25 +436,34 @@ function renderCart() {
         } else {
             reflectionArea = `
                 <div class="wait-box ready">
-
+        
                     <div class="waiting-title">
-                        You've had this in your cart for ${days} day${days === 1 ? "" : "s"}.
+                        Your waiting period is complete.
                     </div>
-
-                    Do you still feel the same way about it?
-
+        
+                    You've considered this for
+                    ${days} day${days === 1 ? "" : "s"}.
+        
+                    <br>
+        
+                    Do you still want it?
+        
                 </div>
-
-                <div class="decision-buttons">
-
-                    <button onclick="decide('${item.id}', 'bought')">
-                        I Bought It
-                    </button>
-
-                    <button onclick="decide('${item.id}', 'not-needed')">
+        
+                <div class="decision-buttons ready-actions">
+        
+                    <button
+                        class="not-needed-button"
+                        onclick="decide('${item.id}', 'not-needed')">
                         I Don't Want It Anymore
                     </button>
-
+        
+                    <button
+                        class="bought-button"
+                        onclick="decide('${item.id}', 'bought')">
+                        I Bought It
+                    </button>
+        
                 </div>
             `;
         }
