@@ -45,11 +45,27 @@ function getProducts() {
 // ============================================================
 
 async function searchProducts(query) {
-    const searchText = query.trim();
+    const searchText =
+        query.trim().toLowerCase();
 
     if (!searchText) {
         return getProducts();
     }
+
+    // Search the built-in browse catalog.
+    const localResults =
+        getProducts().filter(product => {
+            const searchableText = [
+                product.name,
+                product.description,
+                product.category
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return searchableText.includes(searchText);
+        });
 
     const endpoint =
         "https://wait-before-you-buy-api.bcshin-studio.workers.dev/products" +
@@ -57,7 +73,8 @@ async function searchProducts(query) {
         encodeURIComponent(searchText);
 
     try {
-        const response = await fetch(endpoint);
+        const response =
+            await fetch(endpoint);
 
         if (!response.ok) {
             throw new Error(
@@ -65,17 +82,53 @@ async function searchProducts(query) {
             );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        return Array.isArray(data.products)
-            ? data.products
-            : [];
+        const externalResults =
+            Array.isArray(data.products)
+                ? data.products
+                : [];
+
+        // Combine local and external results while removing
+        // obvious duplicates.
+        const combinedResults = [
+            ...localResults,
+            ...externalResults
+        ];
+
+        const uniqueProducts =
+            combinedResults.filter(
+                (product, index, array) => {
+                    const productKey =
+                        `${product.name || ""}|${Number(product.price) || 0}`
+                            .toLowerCase();
+
+                    return (
+                        array.findIndex(item => {
+                            const itemKey =
+                                `${item.name || ""}|${Number(item.price) || 0}`
+                                    .toLowerCase();
+
+                            return itemKey === productKey;
+                        }) === index
+                    );
+                }
+            );
+
+        return uniqueProducts;
 
     } catch (error) {
         console.error(
             "Product search error:",
             error
         );
+
+        // If the external search fails but the local catalog
+        // contains matches, still let the user see them.
+        if (localResults.length > 0) {
+            return localResults;
+        }
 
         throw error;
     }
