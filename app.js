@@ -689,12 +689,17 @@ function openDecisionChange(historyId) {
         item.decision === "bought" ||
         item.decision === "wanted";
 
+    const itemLabel =
+        `${item.name} — ${money(item.price)}`;
+    
     const message =
         isBought
-            ? "Change purchase decision:\n\n" +
+            ? `${itemLabel}\n\n` +
+              "Change purchase decision:\n\n" +
               "1 = Decided not to buy\n" +
               "2 = Undecided"
-            : "Change decision:\n\n" +
+            : `${itemLabel}\n\n` +
+              "Change decision:\n\n" +
               "1 = Bought it\n" +
               "2 = Undecided";
 
@@ -722,8 +727,12 @@ function openOutcomeChange(historyId) {
 
     if (!item) return;
 
+    const itemLabel =
+        `${item.name} — ${money(item.price)}`;
+    
     const choice =
         prompt(
+            `${itemLabel}\n\n` +
             "Change purchase outcome:\n\n" +
             "1 = Not Rated\n" +
             "2 = Worth It\n" +
