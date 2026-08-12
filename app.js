@@ -944,6 +944,20 @@ document
         }
     });
 
+// Pressing Escape also closes the modal.
+document.addEventListener(
+    "keydown",
+    event => {
+        if (
+            event.key === "Escape" &&
+            document
+                .getElementById("waitModal")
+                .classList.contains("active")
+        ) {
+            closeWaitModal();
+        }
+    }
+);
 // ============================================================
 // APPLICATION STARTUP
 // ============================================================
