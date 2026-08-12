@@ -491,6 +491,13 @@ main {
     line-height: 1.5;
 }
 
+.recommendation-note {
+    margin-top: 5px;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: normal;
+}
 
 /* ============================================================
    WAITING-PERIOD OPTIONS
