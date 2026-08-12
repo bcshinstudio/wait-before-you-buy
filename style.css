@@ -641,21 +641,41 @@ footer {
 @media (max-width: 600px) {
 
     header {
-        padding: 15px;
+        padding: 14px 16px;
     }
 
     .header-row {
-        align-items: flex-start;
-        gap: 15px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .logo {
+        line-height: 1.1;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+    }
+
+    nav button {
+        flex: 1;
+        margin-left: 0;
+        padding: 6px 4px;
+        font-size: 13px;
+        text-align: center;
     }
 
     .summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }   
+    }
 
-    nav button {
-        margin-left: 8px;
-        font-size: 13px;
+    .hero {
+        padding: 38px 18px;
     }
 
     .hero h1 {
@@ -675,11 +695,11 @@ footer {
         width: 100%;
     }
 
-   .cart-product-image {
-       width: 70px;
-       height: 70px;
-       font-size: 30px;
-   }   
+    .cart-product-image {
+        width: 70px;
+        height: 70px;
+        font-size: 30px;
+    }
 
     .wait-options {
         grid-template-columns: 1fr;
