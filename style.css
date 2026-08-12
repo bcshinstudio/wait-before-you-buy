@@ -332,6 +332,23 @@ main {
     border-color: #222;
 }
 
+.history-period-label {
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.history-heading {
+    margin: 6px 0 14px;
+    font-size: 18px;
+}
+
+.history-decision {
+    margin-top: 2px;
+    color: #333;
+}
+
 /* ============================================================
    CART ITEMS / COOLING-OFF STATUS
    ============================================================ */
